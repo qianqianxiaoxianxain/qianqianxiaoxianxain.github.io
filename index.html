@@ -2,15 +2,178 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity 移动终端</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Antigravity 移动控制终端</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 28px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+    .icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    p.desc {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 22px;
+    }
+    .countdown-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+    .countdown-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      animation: fillBar 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes fillBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    }
+    .btn-secondary {
+      background: rgba(51, 65, 85, 0.6);
+      color: #e2e8f0;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .btn-secondary:active {
+      background: rgba(71, 85, 105, 0.8);
+      transform: scale(0.98);
+    }
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .badge-fast {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .badge-lan {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
   <script>
-    window.location.replace("https://ceremony-explorer-horizontal-script.trycloudflare.com/?token=ag_pub_g82rzcyh");
+    const primaryUrl = "https://452088744e3a48d5-142-91-103-25.serveousercontent.com/?token=ag_pub_g82rzcyh";
+    let isRedirecting = true;
+
+    function stopAutoRedirect() {
+      isRedirecting = false;
+      const bar = document.getElementById('countBar');
+      if (bar) bar.style.display = 'none';
+      const statusText = document.getElementById('statusText');
+      if (statusText) statusText.innerText = '请选择连接通道：';
+    }
+
+    setTimeout(() => {
+      if (isRedirecting) {
+        window.location.replace(primaryUrl);
+      }
+    }, 1200);
   </script>
 </head>
-<body style="background:#0f172a;color:#38bdf8;text-align:center;padding-top:20vh;font-family:sans-serif;">
-  <h2>🚀 正在连接宿舍电脑 AI 终端...</h2>
-  <p><a style="color:#94a3b8;" href="https://ceremony-explorer-horizontal-script.trycloudflare.com/?token=ag_pub_g82rzcyh">若未自动跳转，点击此处直接进入</a></p>
-  <p style="color:#475569;font-size:12px;margin-top:20px;">Auto-synced: 2026/9/24 09:49:19</p>
+<body>
+  <div class="card">
+    <div class="icon">⚡</div>
+    <h1>Antigravity 移动终端</h1>
+    <p class="desc" id="statusText">正在自动直连宿主机服务...</p>
+
+    <div class="countdown-bar" id="countBar">
+      <div class="countdown-inner"></div>
+    </div>
+
+    <div class="btn-group">
+      <a class="btn btn-primary" href="https://452088744e3a48d5-142-91-103-25.serveousercontent.com/?token=ag_pub_g82rzcyh" onclick="isRedirecting=false">
+        <span>🚀 公网极速通道</span>
+        <span class="badge badge-fast">推荐</span>
+      </a>
+
+      <a class="btn btn-secondary" href="http://10.129.192.115:3000/?token=ag_pub_g82rzcyh" onclick="stopAutoRedirect()">
+        <span>📶 校园 WiFi / 局域网直连</span>
+        <span class="badge badge-lan">内网免流量</span>
+      </a>
+
+      <a class="btn btn-secondary" href="http://26.55.40.127:3000/?token=ag_pub_g82rzcyh" onclick="stopAutoRedirect()">
+        <span>🌐 Radmin VPN 专用通道</span>
+        <span class="badge badge-lan">虚拟网</span>
+      </a>
+    </div>
+
+    <div class="footer">
+      Token: ag_pub_g82rzcyh &bull; 更新时间: 2026/9/24 10:00
+    </div>
+  </div>
 </body>
 </html>
